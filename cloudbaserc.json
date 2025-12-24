@@ -1,0 +1,6 @@
+{
+  "envId": "iosapp01-3gzwkfxgc5fa8d9e",
+  "cloudrun": {
+    "name": "ai-recipe-app"
+  }
+}
