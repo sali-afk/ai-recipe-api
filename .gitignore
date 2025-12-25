@@ -43,9 +43,10 @@ htmlcov/
 .env.local
 
 # Docker
-models/
+/models/
 logs/
 nginx-logs/
+
 
 # SSL Certificates (don't commit private keys!)
 ssl/*.key
