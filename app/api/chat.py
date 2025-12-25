@@ -106,8 +106,8 @@ async def health_check() -> Dict[str, Any]:
     # 数据库连接检查（确保会话正确关闭）
     try:
         from sqlalchemy import text as sql_text
-        from app.core.database import SessionLocal
 
+        SessionLocal = database.get_session_local()
         db = SessionLocal()
         try:
             db.execute(sql_text("SELECT 1"))
@@ -118,6 +118,7 @@ async def health_check() -> Dict[str, Any]:
     except Exception as e:
         components["database"] = f"unhealthy: {str(e)}"
         all_ok = False
+
 
     return {
         "success": all_ok,

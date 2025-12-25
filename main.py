@@ -87,15 +87,22 @@ async def general_exception_handler(request: Request, exc: Exception):
 async def startup_event():
     logger.info("AI菜谱应用后端服务启动中...")
     try:
-        from app.core.database import engine
+        from app.core import database as db_core
         from app.models.recipe import Base
-        logger.info("正在初始化数据库，检查并创建数据表...")
-        Base.metadata.create_all(bind=engine)
-        logger.info("数据库表结构初始化完成。")
+
+        if db_core.is_db_configured():
+            logger.info("正在初始化数据库，检查并创建数据表...")
+            engine = db_core.get_engine()
+            Base.metadata.create_all(bind=engine)
+            logger.info("数据库表结构初始化完成。")
+        else:
+            logger.warning("未检测到 MySQL 配置，跳过数据库初始化（请在云托管绑定 MySQL，并设置 DB_NAME 或 MYSQL_DATABASE）。")
+
     except Exception as e:
         logger.error(f"数据库初始化失败: {e}", exc_info=True)
         # 生产环境中，如果数据库是关键依赖，您可能希望在此处引发异常以停止启动
     logger.info("应用启动完成")
+
 
 
 # 应用关闭事件
